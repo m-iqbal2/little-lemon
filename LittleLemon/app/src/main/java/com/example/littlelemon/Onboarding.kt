@@ -1,8 +1,11 @@
 package com.example.littlelemon
 
+import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,20 +28,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OnBoarding() {
+fun OnBoarding(navController: NavHostController) {
+    var isvalid: Boolean
+    var isFirstNameValid by remember { mutableStateOf(true) }
+    var isLastNameValid by remember { mutableStateOf(true) }
+    var isEmailValid by remember { mutableStateOf(true) }
+    val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("Login", ComponentActivity.MODE_PRIVATE)
+
+
     Column {
         Box(
             modifier = Modifier
@@ -74,9 +84,12 @@ fun OnBoarding() {
             )
         }
 
-        Column(modifier = Modifier
-            .background(Color.White)
-            .fillMaxSize()
+        Column(
+            modifier = Modifier
+                .background(Color.White)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
         ) {
             Text(
                 text = "Personal information",
@@ -92,10 +105,15 @@ fun OnBoarding() {
 
             TextField(
                 value = firstName,
-                onValueChange = { newFirstName -> firstName = newFirstName},
+                onValueChange = { newFirstName
+                    ->
+                    firstName = newFirstName
+                    isFirstNameValid = firstName.isNotBlank()
+                },
                 colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+
+                    focusedIndicatorColor = if (isFirstNameValid) Color.Transparent else Color.Red,
+                    unfocusedIndicatorColor = if (isFirstNameValid) Color.Transparent else Color.Red
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -103,26 +121,29 @@ fun OnBoarding() {
                     .clip(RoundedCornerShape(10.dp))
                     .border(.5.dp, Color.Black, shape = RoundedCornerShape(10.dp))
                     .background(Color.White),
-                label = { Text("First name")},
+                label = { Text("First name") },
 
-            )
+                )
 
             var lastName by remember { mutableStateOf("") }
 
             TextField(
                 value = lastName,
-                onValueChange = { newlastName -> firstName = newlastName},
+                onValueChange = { newlastName
+                    ->
+                    lastName = newlastName
+                    isLastNameValid = lastName.isNotBlank()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 50.dp, end = 10.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .border(.5.dp, Color.Black, shape = RoundedCornerShape(10.dp))
                     .background(Color.White),
-                label = { Text("Last name")},
+                label = { Text("Last name") },
                 colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-
+                    focusedIndicatorColor = if (isLastNameValid) Color.Transparent else Color.Red,
+                    unfocusedIndicatorColor = if (isLastNameValid) Color.Transparent else Color.Red
                 )
             )
 
@@ -130,45 +151,71 @@ fun OnBoarding() {
 
             TextField(
                 value = email,
-                onValueChange = { newEmail -> firstName = newEmail},
+                onValueChange = { newEmail
+                    ->
+                    email = newEmail
+                    isEmailValid = email.isNotBlank() && email.contains("@")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 50.dp, end = 10.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .border(.5.dp, Color.Black, shape = RoundedCornerShape(10.dp))
-                    .background(Color(0xFFFFFF)),
-                label = { Text("Email")},
+                    .background(Color.White),
+                label = { Text("Email") },
                 colors = TextFieldDefaults.textFieldColors(
-                    Color(0xFFFFFF),
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    focusedIndicatorColor = if (isEmailValid) Color.Transparent else Color.Red,
+                    unfocusedIndicatorColor = if (isEmailValid) Color.Transparent else Color.Red
                 )
             )
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    isvalid = when {
+                        firstName.isBlank() -> false
+                        lastName.isBlank() -> false
+                        email.isBlank() -> false
+                        else -> true
+                    }
+                    if (isvalid) {
+                        navController.navigate(Home.route)
+                        sharedPreferences.edit()
+                            .putBoolean("is login", true)
+                            .putString("first name", firstName)
+                            .putString("last name", lastName)
+                            .putString("email", email)
+                            .apply()
+
+                        Toast.makeText(
+                            context, "Registration successful.",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    } else {
+                        Toast.makeText(
+                            context, "Registration unsuccessful. Please enter all data.",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        isvalid = false
+                    }
+
+
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, top = 175.dp)
+                    .padding(start = 10.dp, end = 10.dp, top = 137.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .border(.5.dp, Color.Black, shape = RoundedCornerShape(10.dp))
                     .background(Color(0xFFF4CE14)),
                 colors = ButtonDefaults.buttonColors(Color(0xFFF4CE14)),
 
-            ) {
+                ) {
                 Text(
                     text = "Register",
+                    color = Color(0xFF333333),
                     fontSize = 18.sp,
-                    color = Color.Black
                 )
             }
         }
     }
-
-}
-
-
-@Preview
-@Composable
-fun PreviewOnBoarding() {
-    OnBoarding()
 }
