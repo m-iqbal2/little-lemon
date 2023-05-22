@@ -25,6 +25,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,10 +34,10 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Profile(context: Context, navController: NavHostController) {
-    val sharedPreferences = context.getSharedPreferences("Login", Context.MODE_PRIVATE)
-    val firstname = sharedPreferences.getString("first name", "")
-    val lastName = sharedPreferences.getString("last name", "")
+fun Profile(context: Context, NavHostController: NavHostController) {
+    val  sharedPreferences = context.getSharedPreferences("order_preferences", Context.MODE_PRIVATE)
+    val firstName = sharedPreferences.getString("firstName", "")
+    val lastName = sharedPreferences.getString("lastName", "")
     val email = sharedPreferences.getString("email", "")
     Column {
         Box(
@@ -46,7 +48,7 @@ fun Profile(context: Context, navController: NavHostController) {
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.logo),
+                painter = painterResource(id = R.drawable.littlelemonlogo),
                 contentDescription = "Little lemon logo",
                 modifier = Modifier
                     .fillMaxWidth(.50f)
@@ -70,7 +72,8 @@ fun Profile(context: Context, navController: NavHostController) {
                     .padding(start = 10.dp, top = 40.dp, bottom = 40.dp),
                 style = TextStyle(
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontFamily =  FontFamily(Font(R.font.karlaregular))
                 )
             )
 
@@ -80,7 +83,7 @@ fun Profile(context: Context, navController: NavHostController) {
             )
 
             TextField(
-                value = firstname.toString(),
+                value = firstName.toString(),
                 label = { Text("First Name") },
                 onValueChange = {  },
                 modifier = Modifier
@@ -128,21 +131,31 @@ fun Profile(context: Context, navController: NavHostController) {
                 )
             )
             Button(
-                onClick = { navController.navigate(Onboarding.route) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, top = 160.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .border(.5.dp, Color.Black, shape = RoundedCornerShape(10.dp))
-                    .background(Color(0xFFF4CE14)),
-                colors = ButtonDefaults.buttonColors(Color(0xFFF4CE14)),
-            ) {
-                Text(
-                    text = "Logout",
-                    color = Color(0xFF333333),
-                    fontSize = 18.sp
-                )
-            }
+                    onClick = {
+                        sharedPreferences.edit()
+                            .clear()
+                            .apply()
+
+                        NavHostController.navigate(Onboarding.route) {
+                            popUpTo(Home.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp, top = 160.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .border(.5.dp, Color.Black, shape = RoundedCornerShape(10.dp))
+                        .background(Color(0xFFF4CE14)),
+                    colors = ButtonDefaults.buttonColors(Color(0xFFF4CE14)),
+                ) {
+                    Text(
+                        text = "Logout",
+                        color = Color(0xFF333333),
+                        fontSize = 18.sp
+                    )
+                }
         }
     }
 }

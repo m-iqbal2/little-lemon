@@ -1,10 +1,10 @@
 package com.example.littlelemon
 
+import android.content.Context
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,9 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,16 +41,17 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OnBoarding(navController: NavHostController) {
+fun OnBoarding(context: Context ,NavHostController: NavHostController) {
     var isvalid: Boolean
     var isFirstNameValid by remember { mutableStateOf(true) }
     var isLastNameValid by remember { mutableStateOf(true) }
     var isEmailValid by remember { mutableStateOf(true) }
-    val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences("Login", ComponentActivity.MODE_PRIVATE)
+    val sharedPreferences = context.getSharedPreferences("order_preferences", ComponentActivity.MODE_PRIVATE)
 
 
-    Column {
+    Column(
+        modifier = Modifier.background(Color.White)
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -58,7 +60,7 @@ fun OnBoarding(navController: NavHostController) {
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.logo),
+                painter = painterResource(id = R.drawable.littlelemonlogo),
                 contentDescription = "Little lemon logo",
                 modifier = Modifier
                     .fillMaxWidth(.50f)
@@ -78,12 +80,12 @@ fun OnBoarding(navController: NavHostController) {
                 textAlign = TextAlign.Center,
                 style = TextStyle(
                     color = Color.White,
-                    fontSize = 25.sp,
+                    fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
+                    fontFamily =  FontFamily(Font(R.font.markazitextregular))
                 )
             )
         }
-
         Column(
             modifier = Modifier
                 .background(Color.White)
@@ -96,34 +98,36 @@ fun OnBoarding(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 40.dp, bottom = 40.dp),
+
                 style = TextStyle(
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                    fontWeight = FontWeight.Bold,
+                    fontFamily =  FontFamily(Font(R.font.karlaregular))
+                ),
+
             )
             var firstName by remember { mutableStateOf("") }
 
             TextField(
-                value = firstName,
-                onValueChange = { newFirstName
-                    ->
-                    firstName = newFirstName
-                    isFirstNameValid = firstName.isNotBlank()
-                },
-                colors = TextFieldDefaults.textFieldColors(
+                    value = firstName,
+                    onValueChange = { newFirstName
+                        ->
+                        firstName = newFirstName
+                        isFirstNameValid = firstName.isNotBlank()
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = if (isFirstNameValid) Color.Transparent else Color.Red,
+                        unfocusedIndicatorColor = if (isFirstNameValid) Color.Transparent else Color.Red
+                    ),
+                    modifier = Modifier
+                        .background(Color.White)
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                    ,
+                    label = { Text("First name") },
 
-                    focusedIndicatorColor = if (isFirstNameValid) Color.Transparent else Color.Red,
-                    unfocusedIndicatorColor = if (isFirstNameValid) Color.Transparent else Color.Red
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .border(.5.dp, Color.Black, shape = RoundedCornerShape(10.dp))
-                    .background(Color.White),
-                label = { Text("First name") },
-
-                )
+                    )
 
             var lastName by remember { mutableStateOf("") }
 
@@ -135,11 +139,10 @@ fun OnBoarding(navController: NavHostController) {
                     isLastNameValid = lastName.isNotBlank()
                 },
                 modifier = Modifier
+                    .background(Color.White)
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 50.dp, end = 10.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .border(.5.dp, Color.Black, shape = RoundedCornerShape(10.dp))
-                    .background(Color.White),
+                    .clip(RoundedCornerShape(10.dp)),
                 label = { Text("Last name") },
                 colors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor = if (isLastNameValid) Color.Transparent else Color.Red,
@@ -160,7 +163,6 @@ fun OnBoarding(navController: NavHostController) {
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 50.dp, end = 10.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .border(.5.dp, Color.Black, shape = RoundedCornerShape(10.dp))
                     .background(Color.White),
                 label = { Text("Email") },
                 colors = TextFieldDefaults.textFieldColors(
@@ -177,12 +179,15 @@ fun OnBoarding(navController: NavHostController) {
                         else -> true
                     }
                     if (isvalid) {
-                        navController.navigate(Home.route)
+                        NavHostController.navigate(Home.route) {
+                            popUpTo(Onboarding.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
                         sharedPreferences.edit()
-                            .putBoolean("is login", true)
-                            .putString("first name", firstName)
-                            .putString("last name", lastName)
+                            .putString("firstName", firstName)
+                            .putString("lastName", lastName)
                             .putString("email", email)
+                            .putBoolean("userRegistered", true)
                             .apply()
 
                         Toast.makeText(
@@ -203,9 +208,8 @@ fun OnBoarding(navController: NavHostController) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, top = 137.dp)
+                    .padding(start = 10.dp, end = 10.dp, top = 135.dp, bottom = 10.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .border(.5.dp, Color.Black, shape = RoundedCornerShape(10.dp))
                     .background(Color(0xFFF4CE14)),
                 colors = ButtonDefaults.buttonColors(Color(0xFFF4CE14)),
 
@@ -214,6 +218,7 @@ fun OnBoarding(navController: NavHostController) {
                     text = "Register",
                     color = Color(0xFF333333),
                     fontSize = 18.sp,
+                    fontFamily =  FontFamily(Font(R.font.karlaregular))
                 )
             }
         }
