@@ -20,10 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,10 +40,17 @@ import androidx.navigation.NavHostController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnBoarding(context: Context ,NavHostController: NavHostController) {
-    var isvalid: Boolean
-    var isFirstNameValid by remember { mutableStateOf(true) }
-    var isLastNameValid by remember { mutableStateOf(true) }
-    var isEmailValid by remember { mutableStateOf(true) }
+    val firstName = remember {
+        mutableStateOf("")
+    }
+
+    val lastName = remember {
+        mutableStateOf("")
+    }
+
+    val email = remember {
+        mutableStateOf("")
+    }
     val sharedPreferences = context.getSharedPreferences("order_preferences", ComponentActivity.MODE_PRIVATE)
 
 
@@ -106,18 +111,13 @@ fun OnBoarding(context: Context ,NavHostController: NavHostController) {
                 ),
 
             )
-            var firstName by remember { mutableStateOf("") }
 
             TextField(
-                    value = firstName,
-                    onValueChange = { newFirstName
-                        ->
-                        firstName = newFirstName
-                        isFirstNameValid = firstName.isNotBlank()
-                    },
+                    value = firstName.value,
+                    onValueChange = { firstName.value = it},
                     colors = TextFieldDefaults.textFieldColors(
-                        focusedIndicatorColor = if (isFirstNameValid) Color.Transparent else Color.Red,
-                        unfocusedIndicatorColor = if (isFirstNameValid) Color.Transparent else Color.Red
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
                     ),
                     modifier = Modifier
                         .background(Color.White)
@@ -129,15 +129,9 @@ fun OnBoarding(context: Context ,NavHostController: NavHostController) {
 
                     )
 
-            var lastName by remember { mutableStateOf("") }
-
             TextField(
-                value = lastName,
-                onValueChange = { newlastName
-                    ->
-                    lastName = newlastName
-                    isLastNameValid = lastName.isNotBlank()
-                },
+                value = lastName.value,
+                onValueChange = {lastName.value = it},
                 modifier = Modifier
                     .background(Color.White)
                     .fillMaxWidth()
@@ -145,20 +139,14 @@ fun OnBoarding(context: Context ,NavHostController: NavHostController) {
                     .clip(RoundedCornerShape(10.dp)),
                 label = { Text("Last name") },
                 colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = if (isLastNameValid) Color.Transparent else Color.Red,
-                    unfocusedIndicatorColor = if (isLastNameValid) Color.Transparent else Color.Red
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
                 )
             )
 
-            var email by remember { mutableStateOf("") }
-
             TextField(
-                value = email,
-                onValueChange = { newEmail
-                    ->
-                    email = newEmail
-                    isEmailValid = email.isNotBlank() && email.contains("@")
-                },
+                value = email.value,
+                onValueChange = {email.value = it},
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 50.dp, end = 10.dp)
@@ -166,27 +154,25 @@ fun OnBoarding(context: Context ,NavHostController: NavHostController) {
                     .background(Color.White),
                 label = { Text("Email") },
                 colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = if (isEmailValid) Color.Transparent else Color.Red,
-                    unfocusedIndicatorColor = if (isEmailValid) Color.Transparent else Color.Red
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
                 )
             )
             Button(
                 onClick = {
-                    isvalid = when {
-                        firstName.isBlank() -> false
-                        lastName.isBlank() -> false
-                        email.isBlank() -> false
-                        else -> true
-                    }
-                    if (isvalid) {
+                    if (validateRegData(
+                            firstName.value,
+                            lastName.value,
+                            email.value
+                    )) {
                         NavHostController.navigate(Home.route) {
                             popUpTo(Onboarding.route) { inclusive = true }
                             launchSingleTop = true
                         }
                         sharedPreferences.edit()
-                            .putString("firstName", firstName)
-                            .putString("lastName", lastName)
-                            .putString("email", email)
+                            .putString("firstName", firstName.value)
+                            .putString("lastName", lastName.value)
+                            .putString("email", email.value)
                             .putBoolean("userRegistered", true)
                             .apply()
 
@@ -199,9 +185,7 @@ fun OnBoarding(context: Context ,NavHostController: NavHostController) {
                         Toast.makeText(
                             context, "Registration unsuccessful. Please enter all data.",
                             Toast.LENGTH_SHORT
-                        )
-                            .show()
-                        isvalid = false
+                        ).show()
                     }
 
 

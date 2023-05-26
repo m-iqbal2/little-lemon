@@ -8,10 +8,10 @@ import androidx.navigation.compose.composable
 
 @Composable
 fun MyNavigationComposable(context: Context ,navController: NavHostController) {
-    val sharedPreferences = context.getSharedPreferences("Little Lemon", Context.MODE_PRIVATE)
+    val sharedPreferences = context.getSharedPreferences("order_preferences", Context.MODE_PRIVATE)
     var startDestination = Onboarding.route
 
-    if (sharedPreferences.getBoolean("userRegistered", false)) {
+    if (sharedPreferences.getBoolean("order_preferences", false)) {
         startDestination = Home.route
     }
     NavHost(

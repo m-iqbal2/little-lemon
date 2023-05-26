@@ -201,7 +201,6 @@ fun LowerPanel(databaseMenuItems: List<MenuItemRoom>, search: MutableState<Strin
     } else {
         databaseMenuItems.filter {
             it.title.contains(search.value, ignoreCase = true)
-
         }
     }
 
@@ -276,7 +275,10 @@ fun MenuItem(item: MenuItemRoom) {
                 GlideImage(
                     model = item.imageUrl,
                     contentDescription = "",
-                    Modifier.size(100.dp, 100.dp),
+                    Modifier
+                        .size(100.dp, 100.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                    ,
                     contentScale = ContentScale.Crop
                 )
             }
@@ -326,11 +328,15 @@ fun MenuCategories(categories: Set<String>, categoryLambda : (sel: String) -> Un
                         cat.value = it
                         categoryLambda(it)
                     }
-
                 }
 
             }
         }
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            color = Color.Gray,
+            thickness = .5.dp
+        )
     }
 }
 
