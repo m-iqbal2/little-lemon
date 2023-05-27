@@ -84,9 +84,8 @@ fun Header(navController: NavHostController) {
             .fillMaxWidth()
             .background(Color.White),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-
-    ) {
+        horizontalArrangement = Arrangement.SpaceBetween
+        ) {
         Spacer(modifier = Modifier.width(50.dp))
         Image(
             painter = painterResource(id = R.drawable.littlelemonlogo),
@@ -105,7 +104,7 @@ fun Header(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(vertical = 2.dp)
-                )
+            )
         }
     }
 }
@@ -118,69 +117,70 @@ fun UpperPanel(search : (parameter: String)-> Unit) {
 
     Log.d("AAA-AA", "UpperPanel: ${searchPhrase.value}")
     Column(
-            modifier = Modifier
-                .background(Color(0xFF495E57))
-                .padding(horizontal = 10.dp, vertical = 6.dp)) {
+        modifier = Modifier
+            .background(Color(0xFF495E57))
+            .padding(horizontal = 10.dp, vertical = 6.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.title),
+            fontSize = 50.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFF4CE14),
+            fontFamily = FontFamily(Font(R.font.markazitextregular))
+        )
+        Text(
+            text = stringResource(id = R.string.location),
+            fontSize = 30.sp,
+            color = Color(0xFFEDEFEE),
+            fontFamily = FontFamily(Font(R.font.karlaregular))
+        )
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(
-                text = stringResource(id = R.string.title),
-                fontSize = 50.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFFF4CE14),
-                fontFamily = FontFamily(Font(R.font.markazitextregular))
-            )
-            Text(
-                text = stringResource(id = R.string.location),
-                fontSize = 30.sp,
+                text = stringResource(id = R.string.description),
                 color = Color(0xFFEDEFEE),
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .padding(bottom = 28.dp)
+                    .fillMaxWidth(0.6f),
                 fontFamily = FontFamily(Font(R.font.karlaregular))
             )
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = stringResource(id = R.string.description),
-                    color = Color(0xFFEDEFEE),
-                    fontSize = 18.sp,
-                    modifier = Modifier
-                        .padding(bottom = 28.dp)
-                        .fillMaxWidth(0.6f),
-                    fontFamily = FontFamily(Font(R.font.karlaregular))
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.hero_image),
-                    contentDescription = "Hero Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .padding(bottom = 20.dp, end = 5.dp)
-                        .size(height = 140.dp, width = 120.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                )
-            }
-            OutlinedTextField(
-                value = searchPhrase.value,
-                onValueChange = {
-                    searchPhrase.value = it
-                    search(searchPhrase.value)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                placeholder = { Text(text = "Search") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search Icon"
-                    )
-                },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    backgroundColor = MaterialTheme.colors.background,
-                    focusedBorderColor = Color.Yellow,
-                    cursorColor = Color.Black
-                )
+            Image(
+                painter = painterResource(id = R.drawable.hero_image),
+                contentDescription = "Hero Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(bottom = 20.dp, end = 5.dp)
+                    .size(height = 140.dp, width = 120.dp)
+                    .clip(RoundedCornerShape(16.dp))
             )
-
         }
+        OutlinedTextField(
+            value = searchPhrase.value,
+            onValueChange = {
+                searchPhrase.value = it
+                search(searchPhrase.value)
+            },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            placeholder = { Text(text = "Search") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search Icon"
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = MaterialTheme.colors.background,
+                focusedBorderColor = Color.Yellow,
+                cursorColor = Color.Black
+            )
+        )
+
+    }
 
 
 }
@@ -234,60 +234,60 @@ fun MenuItem(item: MenuItemRoom) {
     else{
         item.description
     }
-        Card(
-            modifier = Modifier
-                .clickable {}
+    Card(
+        modifier = Modifier
+            .clickable {}
+            .background(Color.White)
+    ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
                 .background(Color.White)
+                .padding(vertical = 10.dp, horizontal = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(vertical = 10.dp, horizontal = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                Modifier.fillMaxWidth(0.7f),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(
-                    Modifier.fillMaxWidth(0.7f),
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = item.title,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(bottom = 10.dp),
-                        fontFamily = FontFamily(Font(R.font.karlaregular)),
-                        fontSize = 18.sp
-                    )
-                    Text(
-                        text = itemDescription,
-                        modifier = Modifier.padding(bottom = 10.dp),
-                        fontFamily = FontFamily(Font(R.font.karlaregular))
-                    )
-
-                    Text(
-                        text = "$ ${item.price}",
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily(Font(R.font.karlaregular))
-                    )
-
-                }
-
-                GlideImage(
-                    model = item.imageUrl,
-                    contentDescription = "",
-                    Modifier
-                        .size(100.dp, 100.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                    ,
-                    contentScale = ContentScale.Crop
+                Text(
+                    text = item.title,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 10.dp),
+                    fontFamily = FontFamily(Font(R.font.karlaregular)),
+                    fontSize = 18.sp
                 )
+                Text(
+                    text = itemDescription,
+                    modifier = Modifier.padding(bottom = 10.dp),
+                    fontFamily = FontFamily(Font(R.font.karlaregular))
+                )
+
+                Text(
+                    text = "$ ${item.price}",
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily(Font(R.font.karlaregular))
+                )
+
             }
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                color = Color.Gray,
-                thickness = .5.dp
-                )
+
+            GlideImage(
+                model = item.imageUrl,
+                contentDescription = "",
+                Modifier
+                    .size(100.dp, 100.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                ,
+                contentScale = ContentScale.Crop
+            )
         }
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            color = Color.Gray,
+            thickness = .5.dp
+        )
+    }
 }
 @Composable
 fun MenuCategories(categories: Set<String>, categoryLambda : (sel: String) -> Unit) {
@@ -349,7 +349,7 @@ fun CategoryButton(category: String, selectedCategory:(sel: String) -> Unit) {
         onClick = {
             isClicked.value = !isClicked.value
             selectedCategory(category)
-         },
+        },
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
         shape = RoundedCornerShape(40),
         modifier = Modifier.padding(5.dp)

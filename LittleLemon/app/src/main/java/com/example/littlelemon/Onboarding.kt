@@ -13,12 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,7 +35,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnBoarding(context: Context ,NavHostController: NavHostController) {
     val firstName = remember {
@@ -110,53 +107,49 @@ fun OnBoarding(context: Context ,NavHostController: NavHostController) {
                     fontFamily =  FontFamily(Font(R.font.karlaregular))
                 ),
 
+                )
+
+            androidx.compose.material.OutlinedTextField(
+                value = firstName.value,
+                onValueChange = { firstName.value = it},
+                colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                    backgroundColor = Color.White,
+                    focusedBorderColor = Color.Gray,
+                    cursorColor = Color.Black
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp),
+                label = { Text("First name") },
+                shape = RoundedCornerShape(10.dp)
             )
-
-            TextField(
-                    value = firstName.value,
-                    onValueChange = { firstName.value = it},
-                    colors = TextFieldDefaults.textFieldColors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    modifier = Modifier
-                        .background(Color.White)
-                        .fillMaxWidth()
-                        .padding(start = 10.dp, end = 10.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                    ,
-                    label = { Text("First name") },
-
-                    )
-
-            TextField(
+            androidx.compose.material.OutlinedTextField(
                 value = lastName.value,
                 onValueChange = {lastName.value = it},
                 modifier = Modifier
-                    .background(Color.White)
                     .fillMaxWidth()
-                    .padding(start = 10.dp, top = 50.dp, end = 10.dp)
-                    .clip(RoundedCornerShape(10.dp)),
+                    .padding(start = 10.dp, top = 50.dp, end = 10.dp),
                 label = { Text("Last name") },
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
+                colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                    backgroundColor = Color.White,
+                    focusedBorderColor = Color.Gray,
+                    cursorColor = Color.Black
+                ),
+                shape = RoundedCornerShape(10.dp)
             )
-
-            TextField(
+            androidx.compose.material.OutlinedTextField(
                 value = email.value,
                 onValueChange = {email.value = it},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, top = 50.dp, end = 10.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(Color.White),
+                    .padding(start = 10.dp, top = 50.dp, end = 10.dp),
                 label = { Text("Email") },
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
+                colors = androidx.compose.material.TextFieldDefaults.outlinedTextFieldColors(
+                    backgroundColor = MaterialTheme.colors.background,
+                    focusedBorderColor = Color.Gray,
+                    cursorColor = Color.Black
+                ),
+                shape = RoundedCornerShape(10.dp)
             )
             Button(
                 onClick = {
@@ -164,7 +157,7 @@ fun OnBoarding(context: Context ,NavHostController: NavHostController) {
                             firstName.value,
                             lastName.value,
                             email.value
-                    )) {
+                        )) {
                         NavHostController.navigate(Home.route) {
                             popUpTo(Onboarding.route) { inclusive = true }
                             launchSingleTop = true
@@ -192,11 +185,10 @@ fun OnBoarding(context: Context ,NavHostController: NavHostController) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, top = 135.dp, bottom = 10.dp)
+                    .padding(start = 10.dp, end = 10.dp, top = 105.dp, bottom = 10.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(Color(0xFFF4CE14)),
-                colors = ButtonDefaults.buttonColors(Color(0xFFF4CE14)),
-
+                colors = ButtonDefaults.buttonColors(Color(0xFFF4CE14))
                 ) {
                 Text(
                     text = "Register",
@@ -207,4 +199,5 @@ fun OnBoarding(context: Context ,NavHostController: NavHostController) {
             }
         }
     }
+
 }
