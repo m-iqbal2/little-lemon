@@ -1,6 +1,5 @@
 package com.example.littlelemon
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -115,7 +114,6 @@ fun UpperPanel(search : (parameter: String)-> Unit) {
         mutableStateOf("")
     }
 
-    Log.d("AAA-AA", "UpperPanel: ${searchPhrase.value}")
     Column(
         modifier = Modifier
             .background(Color(0xFF495E57))
@@ -277,8 +275,7 @@ fun MenuItem(item: MenuItemRoom) {
                 contentDescription = "",
                 Modifier
                     .size(100.dp, 100.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                ,
+                    .clip(RoundedCornerShape(10.dp)),
                 contentScale = ContentScale.Crop
             )
         }
@@ -350,7 +347,7 @@ fun CategoryButton(category: String, selectedCategory:(sel: String) -> Unit) {
             isClicked.value = !isClicked.value
             selectedCategory(category)
         },
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+        colors = ButtonDefaults.buttonColors(backgroundColor =  Color.LightGray),
         shape = RoundedCornerShape(40),
         modifier = Modifier.padding(5.dp)
     ) {
