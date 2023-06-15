@@ -142,7 +142,10 @@ fun Profile(context: Context, NavHostController: NavHostController) {
                     )
             ) {
                 IconButton(
-                    onClick = {NavHostController.navigate(Home.route)},
+                    onClick = {NavHostController.navigate(Home.route) {
+                        popUpTo(Profile.route) { inclusive = true }
+                        launchSingleTop = true
+                    } },
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,

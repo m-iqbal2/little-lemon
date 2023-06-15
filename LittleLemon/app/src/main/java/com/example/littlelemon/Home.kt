@@ -177,10 +177,7 @@ fun UpperPanel(search : (parameter: String)-> Unit) {
                 cursorColor = Color.Black
             )
         )
-
     }
-
-
 }
 @Composable
 fun LowerPanel(databaseMenuItems: List<MenuItemRoom>, search: MutableState<String>) {
@@ -225,7 +222,6 @@ fun LowerPanel(databaseMenuItems: List<MenuItemRoom>, search: MutableState<Strin
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun MenuItem(item: MenuItemRoom) {
-
     val itemDescription = if(item.description.length>100) {
         item.description.substring(0,100) + ". . ."
     }
@@ -234,7 +230,7 @@ fun MenuItem(item: MenuItemRoom) {
     }
     Card(
         modifier = Modifier
-            .clickable {}
+            .clickable {  }
             .background(Color.White)
     ) {
         Row(
