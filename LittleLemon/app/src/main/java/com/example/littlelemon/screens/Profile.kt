@@ -1,4 +1,4 @@
-package com.example.littlelemon
+package com.example.littlelemon.screens
 
 import android.Manifest
 import android.content.Context
@@ -53,6 +53,8 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import com.example.littlelemon.R
+import com.example.littlelemon.navigation.Onboarding
 
 @Composable
 fun Profile(context: Context, NavHostController: NavHostController) {
@@ -142,8 +144,8 @@ fun Profile(context: Context, NavHostController: NavHostController) {
                     )
             ) {
                 IconButton(
-                    onClick = {NavHostController.navigate(Home.route) {
-                        popUpTo(Profile.route) { inclusive = true }
+                    onClick = {NavHostController.navigate(com.example.littlelemon.navigation.Home.route) {
+                        popUpTo(com.example.littlelemon.navigation.Profile.route) { inclusive = true }
                         launchSingleTop = true
                     } },
                 ) {
@@ -367,7 +369,7 @@ fun Profile(context: Context, NavHostController: NavHostController) {
                         .apply()
 
                     NavHostController.navigate(Onboarding.route) {
-                        popUpTo(Home.route) { inclusive = true }
+                        popUpTo(com.example.littlelemon.navigation.Home.route) { inclusive = true }
                         launchSingleTop = true
                     }
                 },

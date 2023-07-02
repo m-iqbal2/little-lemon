@@ -1,4 +1,4 @@
-package com.example.littlelemon
+package com.example.littlelemon.screens
 
 import android.content.Context
 import android.widget.Toast
@@ -33,7 +33,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-
+import com.example.littlelemon.R
+import com.example.littlelemon.helperfunctions.validateRegData
+import com.example.littlelemon.navigation.Onboarding
 
 
 @Composable
@@ -158,8 +160,9 @@ fun OnBoarding(context: Context ,NavHostController: NavHostController) {
                             firstName.value,
                             lastName.value,
                             email.value
-                        )) {
-                        NavHostController.navigate(Home.route) {
+                        )
+                    ) {
+                        NavHostController.navigate(com.example.littlelemon.navigation.Home.route) {
                             popUpTo(Onboarding.route) { inclusive = true }
                             launchSingleTop = true
                         }

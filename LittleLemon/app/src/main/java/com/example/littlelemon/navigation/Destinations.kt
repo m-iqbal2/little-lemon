@@ -1,4 +1,4 @@
-package com.example.littlelemon
+package com.example.littlelemon.navigation
 
 interface Destinations {
     val route: String
@@ -12,7 +12,7 @@ object Profile: Destinations {
     override val route = "Profile"
 }
 
-object Onboarding: Destinations{
+object Onboarding: Destinations {
     override val route = "Onboarding"
 }
 

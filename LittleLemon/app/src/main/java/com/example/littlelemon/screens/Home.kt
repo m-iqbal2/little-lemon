@@ -1,4 +1,4 @@
-package com.example.littlelemon
+package com.example.littlelemon.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,6 +50,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.littlelemon.myviewmodel.MyViewModel
+import com.example.littlelemon.R
+import com.example.littlelemon.data.local.MenuItemRoom
 
 @Composable
 fun Home(navController: NavHostController) {
@@ -96,7 +99,7 @@ fun Header(navController: NavHostController) {
 
         Box(modifier = Modifier
             .size(50.dp)
-            .clickable { navController.navigate(Profile.route) }){
+            .clickable { navController.navigate(com.example.littlelemon.navigation.Profile.route) }){
             Image(
                 painter = painterResource(id = R.drawable.profile),
                 contentDescription = "Profile",
